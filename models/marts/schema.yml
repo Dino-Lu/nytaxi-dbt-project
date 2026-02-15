@@ -2,47 +2,57 @@ version: 2
 
 models:
   - name: dim_zones
-    description: "Taxi zone dimension table with location details."
+    description: Taxi zone dimension table
+
     columns:
       - name: location_id
-        description: "Unique identifier for each taxi zone."
+        description: Unique zone identifier
         tests:
           - unique
           - not_null
+
       - name: borough
-        description: "NYC borough name."
+        description: NYC borough name
+
       - name: zone
-        description: "Specific zone name within the borough."
+        description: Zone name
+
       - name: service_zone
-        description: "Service zone classification."
+        description: Service zone classification
+
 
   - name: dim_vendors
-    description: "Taxi technology vendor dimension table."
+    description: Taxi technology vendor dimension table
+
     columns:
       - name: vendor_id
-        description: "Unique vendor identifier."
+        description: Unique vendor identifier
         tests:
           - unique
           - not_null
+
       - name: vendor_name
-        description: "Company name of the vendor."
+        description: Vendor company name
+
 
   - name: fct_trips
-    description: "Fact table with all taxi trips including trip and payment details."
-    # Optional: contracts (only use if you're sure your column names/types match exactly)
-    # config:
-    #   contract:
-    #     enforced: true
+    description: Fact table containing all taxi trips
+
+    config:
+      contract:
+        enforced: true
 
     columns:
       - name: trip_id
-        description: "Unique trip identifier."
+        description: Unique trip identifier
+        data_type: string
         tests:
           - unique
           - not_null
 
       - name: vendor_id
-        description: "Taxi technology provider."
+        description: Taxi technology provider
+        data_type: int64
         tests:
           - not_null
           - relationships:
@@ -50,48 +60,49 @@ models:
               field: vendor_id
 
       - name: service_type
-        description: "Type of taxi service (Green or Yellow)."
+        description: Taxi service type
+        data_type: string
         tests:
           - not_null
           - accepted_values:
               values: ['Green', 'Yellow']
 
-      - name: rate_code_id
-        description: "Final rate code."
-
       - name: pickup_location_id
-        description: "TLC Taxi Zone where trip started."
+        description: Pickup zone ID
+        data_type: int64
         tests:
           - relationships:
               to: ref('dim_zones')
               field: location_id
 
       - name: dropoff_location_id
-        description: "TLC Taxi Zone where trip ended."
+        description: Dropoff zone ID
+        data_type: int64
         tests:
           - relationships:
               to: ref('dim_zones')
               field: location_id
 
       - name: pickup_datetime
-        description: "Timestamp when meter was engaged."
+        description: Trip start timestamp
+        data_type: timestamp
         tests:
           - not_null
 
-      - name: dropoff_datetime
-        description: "Timestamp when meter was disengaged."
-
       - name: total_amount
-        description: "Total amount charged."
+        description: Total trip amount
+        data_type: numeric
         tests:
           - not_null
 
       - name: payment_type
-        description: "Payment method code."
+        description: Payment method code
+        data_type: int64
         tests:
           - relationships:
               to: ref('payment_type_lookup')
               field: payment_type
 
       - name: payment_type_description
-        description: "Human-readable payment method description."
+        description: Human-readable payment description
+        data_type: string

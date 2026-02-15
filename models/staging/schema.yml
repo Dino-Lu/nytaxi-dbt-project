@@ -2,25 +2,130 @@ version: 2
 
 models:
   - name: stg_green_tripdata
-    description: Staging model for green taxi data.
+    description: >
+      Staging model for green taxi trip data. Standardizes column names
+      and data types from the raw source.
+
     columns:
       - name: vendor_id
-        description: Taxi technology provider.
-        tests:
-          - not_null
-      - name: pickup_datetime
-        description: Date and time when the meter was engaged.
+        description: Taxi technology provider ID
         tests:
           - not_null
 
+      - name: rate_code_id
+        description: Rate code at end of trip
+
+      - name: pickup_location_id
+        description: TLC Taxi Zone where the meter was engaged
+
+      - name: dropoff_location_id
+        description: TLC Taxi Zone where the meter was disengaged
+
+      - name: pickup_datetime
+        description: Date and time when the meter was engaged
+        tests:
+          - not_null
+
+      - name: dropoff_datetime
+        description: Date and time when the meter was disengaged
+
+      - name: store_and_fwd_flag
+        description: Indicates if record was stored before transmission
+
+      - name: passenger_count
+        description: Number of passengers
+
+      - name: trip_distance
+        description: Trip distance in miles
+
+      - name: trip_type
+        description: Trip type (1=Street-hail, 2=Dispatch)
+
+      - name: fare_amount
+        description: Time and distance fare
+
+      - name: extra
+        description: Miscellaneous extras
+
+      - name: mta_tax
+        description: MTA tax
+
+      - name: tip_amount
+        description: Tip amount
+
+      - name: tolls_amount
+        description: Total tolls paid
+
+      - name: ehail_fee
+        description: E-hail service fee
+
+      - name: improvement_surcharge
+        description: Improvement surcharge
+
+      - name: total_amount
+        description: Total amount charged
+
+      - name: payment_type
+        description: Payment method code
+
+
   - name: stg_yellow_tripdata
-    description: Staging model for yellow taxi data.
+    description: >
+      Staging model for yellow taxi trip data. Standardizes column names
+      and data types from the raw source.
+
     columns:
       - name: vendor_id
-        description: Taxi technology provider.
+        description: Taxi technology provider ID
         tests:
           - not_null
+
+      - name: rate_code_id
+        description: Rate code at end of trip
+
+      - name: pickup_location_id
+        description: TLC Taxi Zone where the meter was engaged
+
+      - name: dropoff_location_id
+        description: TLC Taxi Zone where the meter was disengaged
+
       - name: pickup_datetime
-        description: Date and time when the meter was engaged.
+        description: Date and time when the meter was engaged
         tests:
           - not_null
+
+      - name: dropoff_datetime
+        description: Date and time when the meter was disengaged
+
+      - name: store_and_fwd_flag
+        description: Indicates if record was stored before transmission
+
+      - name: passenger_count
+        description: Number of passengers
+
+      - name: trip_distance
+        description: Trip distance in miles
+
+      - name: fare_amount
+        description: Time and distance fare
+
+      - name: extra
+        description: Miscellaneous extras
+
+      - name: mta_tax
+        description: MTA tax
+
+      - name: tip_amount
+        description: Tip amount
+
+      - name: tolls_amount
+        description: Total tolls paid
+
+      - name: improvement_surcharge
+        description: Improvement surcharge
+
+      - name: total_amount
+        description: Total amount charged
+
+      - name: payment_type
+        description: Payment method code
