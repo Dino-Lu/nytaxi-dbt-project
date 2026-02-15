@@ -7,8 +7,8 @@ with source as (
 renamed as (
     select
         -- identifiers
-        cast(vendorid as int64) as vendorid,
-        cast(ratecodeid as int64) as ratecodeid,
+        cast(vendorid as int64) as vendor_id,
+        cast(ratecodeid as int64) as rate_code_id,
         cast(pulocationid as int64) as pickup_locationid,
         cast(dolocationid as int64) as dropoff_locationid,
 
@@ -22,7 +22,7 @@ renamed as (
         cast(trip_distance as numeric) as trip_distance,
 
         -- yellow usually has no trip_type; keep it nullable for union compatibility
-        cast(null as int64) as trip_type,
+        cast(1 as int64) as trip_type,  -- Yellow only does street-hail
 
         -- payment info
         cast(fare_amount as numeric) as fare_amount,
@@ -30,7 +30,7 @@ renamed as (
         cast(mta_tax as numeric) as mta_tax,
         cast(tip_amount as numeric) as tip_amount,
         cast(tolls_amount as numeric) as tolls_amount,
-        cast(ehail_fee as numeric) as ehail_fee,
+        cast(0 as numeric) as ehail_fee,
         cast(improvement_surcharge as numeric) as improvement_surcharge,
         cast(total_amount as numeric) as total_amount,
         cast(payment_type as int64) as payment_type

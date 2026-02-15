@@ -7,8 +7,8 @@ with source as (
 renamed as (
     select
         -- identifiers
-        cast(vendorid as int64) as vendorid,
-        cast(ratecodeid as int64) as ratecodeid,
+        cast(vendorid as int64) as vendor_id,
+        cast(ratecodeid as int64) as rate_code_id,
         cast(pulocationid as int64) as pickup_locationid,
         cast(dolocationid as int64) as dropoff_locationid,
 
