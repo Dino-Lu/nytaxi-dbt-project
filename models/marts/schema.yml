@@ -1,0 +1,97 @@
+version: 2
+
+models:
+  - name: dim_zones
+    description: "Taxi zone dimension table with location details."
+    columns:
+      - name: location_id
+        description: "Unique identifier for each taxi zone."
+        tests:
+          - unique
+          - not_null
+      - name: borough
+        description: "NYC borough name."
+      - name: zone
+        description: "Specific zone name within the borough."
+      - name: service_zone
+        description: "Service zone classification."
+
+  - name: dim_vendors
+    description: "Taxi technology vendor dimension table."
+    columns:
+      - name: vendor_id
+        description: "Unique vendor identifier."
+        tests:
+          - unique
+          - not_null
+      - name: vendor_name
+        description: "Company name of the vendor."
+
+  - name: fct_trips
+    description: "Fact table with all taxi trips including trip and payment details."
+    # Optional: contracts (only use if you're sure your column names/types match exactly)
+    # config:
+    #   contract:
+    #     enforced: true
+
+    columns:
+      - name: trip_id
+        description: "Unique trip identifier."
+        tests:
+          - unique
+          - not_null
+
+      - name: vendor_id
+        description: "Taxi technology provider."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_vendors')
+              field: vendor_id
+
+      - name: service_type
+        description: "Type of taxi service (Green or Yellow)."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Green', 'Yellow']
+
+      - name: rate_code_id
+        description: "Final rate code."
+
+      - name: pickup_location_id
+        description: "TLC Taxi Zone where trip started."
+        tests:
+          - relationships:
+              to: ref('dim_zones')
+              field: location_id
+
+      - name: dropoff_location_id
+        description: "TLC Taxi Zone where trip ended."
+        tests:
+          - relationships:
+              to: ref('dim_zones')
+              field: location_id
+
+      - name: pickup_datetime
+        description: "Timestamp when meter was engaged."
+        tests:
+          - not_null
+
+      - name: dropoff_datetime
+        description: "Timestamp when meter was disengaged."
+
+      - name: total_amount
+        description: "Total amount charged."
+        tests:
+          - not_null
+
+      - name: payment_type
+        description: "Payment method code."
+        tests:
+          - relationships:
+              to: ref('payment_type_lookup')
+              field: payment_type
+
+      - name: payment_type_description
+        description: "Human-readable payment method description."

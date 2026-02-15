@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: stg_green_tripdata
+    description: Staging model for green taxi data.
+    columns:
+      - name: vendor_id
+        description: Taxi technology provider.
+        tests:
+          - not_null
+      - name: pickup_datetime
+        description: Date and time when the meter was engaged.
+        tests:
+          - not_null
+
+  - name: stg_yellow_tripdata
+    description: Staging model for yellow taxi data.
+    columns:
+      - name: vendor_id
+        description: Taxi technology provider.
+        tests:
+          - not_null
+      - name: pickup_datetime
+        description: Date and time when the meter was engaged.
+        tests:
+          - not_null

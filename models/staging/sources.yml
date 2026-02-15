@@ -1,0 +1,19 @@
+version: 2
+
+sources:
+  - name: raw_data
+    description: "Raw NYC Taxi data loaded from GCS into BigQuery"
+    database: peppy-tiger-486913-i5 # Or ID of your GCP project
+    schema: nytaxi # Or name of your BigQuery dataset
+    
+    tables:
+      - name: green_tripdata
+        description: "Green taxi trip records for 2019-2020"
+        freshness:
+          warn_after: {count: 1, period: day}
+          error_after: {count: 2, period: day}
+      - name: yellow_tripdata
+        description: "Yellow taxi trip records for 2019-2020"
+        freshness:
+          warn_after: {count: 1, period: day}
+          error_after: {count: 2, period: day}
