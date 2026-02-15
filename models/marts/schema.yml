@@ -1,57 +1,22 @@
 version: 2
 
 models:
-  - name: dim_zones
-    description: Taxi zone dimension table
-
-    columns:
-      - name: location_id
-        description: Unique zone identifier
-        tests:
-          - unique
-          - not_null
-
-      - name: borough
-        description: NYC borough name
-
-      - name: zone
-        description: Zone name
-
-      - name: service_zone
-        description: Service zone classification
-
-
-  - name: dim_vendors
-    description: Taxi technology vendor dimension table
-
-    columns:
-      - name: vendor_id
-        description: Unique vendor identifier
-        tests:
-          - unique
-          - not_null
-
-      - name: vendor_name
-        description: Vendor company name
-
-
   - name: fct_trips
-    description: Fact table containing all taxi trips
-
+    description: Fact table containing all taxi trips (green + yellow), enriched with zone names.
     config:
       contract:
         enforced: true
 
     columns:
       - name: trip_id
-        description: Unique trip identifier
+        description: Unique trip identifier (surrogate key).
         data_type: string
         tests:
           - unique
           - not_null
 
       - name: vendor_id
-        description: Taxi technology provider
+        description: Taxi technology provider ID.
         data_type: int64
         tests:
           - not_null
@@ -60,43 +25,111 @@ models:
               field: vendor_id
 
       - name: service_type
-        description: Taxi service type
+        description: Type of taxi service (Green or Yellow).
         data_type: string
         tests:
           - not_null
           - accepted_values:
               values: ['Green', 'Yellow']
 
+      - name: rate_code_id
+        description: Rate code at end of trip.
+        data_type: int64
+
       - name: pickup_location_id
-        description: Pickup zone ID
+        description: TLC Taxi Zone ID where trip started.
         data_type: int64
         tests:
           - relationships:
               to: ref('dim_zones')
               field: location_id
+
+      - name: pickup_borough
+        description: Borough of the pickup zone.
+        data_type: string
+
+      - name: pickup_zone
+        description: Zone name of the pickup location.
+        data_type: string
 
       - name: dropoff_location_id
-        description: Dropoff zone ID
+        description: TLC Taxi Zone ID where trip ended.
         data_type: int64
         tests:
           - relationships:
               to: ref('dim_zones')
               field: location_id
 
+      - name: dropoff_borough
+        description: Borough of the dropoff zone.
+        data_type: string
+
+      - name: dropoff_zone
+        description: Zone name of the dropoff location.
+        data_type: string
+
       - name: pickup_datetime
-        description: Trip start timestamp
+        description: Timestamp when meter was engaged.
         data_type: timestamp
         tests:
           - not_null
 
+      - name: dropoff_datetime
+        description: Timestamp when meter was disengaged.
+        data_type: timestamp
+
+      - name: store_and_fwd_flag
+        description: Whether the trip record was stored in vehicle memory before sending (Y/N).
+        data_type: string
+
+      - name: passenger_count
+        description: Number of passengers.
+        data_type: int64
+
+      - name: trip_distance
+        description: Trip distance in miles.
+        data_type: numeric
+
+      - name: trip_type
+        description: Trip type (1=Street-hail, 2=Dispatch).
+        data_type: int64
+
+      - name: fare_amount
+        description: Fare amount.
+        data_type: numeric
+
+      - name: extra
+        description: Extra charges (rush hour, overnight, etc.).
+        data_type: numeric
+
+      - name: mta_tax
+        description: MTA tax.
+        data_type: numeric
+
+      - name: tip_amount
+        description: Tip amount.
+        data_type: numeric
+
+      - name: tolls_amount
+        description: Tolls amount.
+        data_type: numeric
+
+      - name: ehail_fee
+        description: E-hail fee.
+        data_type: numeric
+
+      - name: improvement_surcharge
+        description: Improvement surcharge.
+        data_type: numeric
+
       - name: total_amount
-        description: Total trip amount
+        description: Total amount charged.
         data_type: numeric
         tests:
           - not_null
 
       - name: payment_type
-        description: Payment method code
+        description: Payment method code.
         data_type: int64
         tests:
           - relationships:
@@ -104,5 +137,5 @@ models:
               field: payment_type
 
       - name: payment_type_description
-        description: Human-readable payment description
+        description: Human-readable payment type description.
         data_type: string
