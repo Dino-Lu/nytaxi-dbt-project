@@ -2,8 +2,8 @@ with source as (
     select *
     from {{ source('raw_data', 'yellow_tripdata') }}
     where vendorid is not null
-        and pickup_datetime >= '2019-01-01'
-        and pickup_datetime <  '2021-01-01'
+        and tpep_pickup_datetime >= '2019-01-01'
+        and tpep_pickup_datetime <  '2021-01-01'
 ),
 
 renamed as (
