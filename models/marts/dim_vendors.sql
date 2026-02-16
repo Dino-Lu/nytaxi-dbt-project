@@ -1,5 +1,8 @@
+-- Dimension table for taxi technology vendors
+-- Small static dimension defining vendor codes and their company names
+
 with trips as (
-    select * from {{ ref('int_trips_unioned') }}
+    select * from {{ ref('fct_trips') }}
 ),
 
 vendors as (
