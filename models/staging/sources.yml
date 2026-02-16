@@ -17,3 +17,5 @@ sources:
         freshness:
           warn_after: {count: 3650, period: day}
           error_after: {count: 36500, period: day}
+      - name: fhv_tripdata
+        description: "For-Hire Vehicle (FHV) trip data for 2019"
