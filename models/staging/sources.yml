@@ -10,10 +10,10 @@ sources:
       - name: green_tripdata
         description: "Green taxi trip records for 2019-2020"
         freshness:
-          warn_after: {count: 1, period: day}
-          error_after: {count: 2, period: day}
+          warn_after: {count: 3650, period: day}
+          error_after: {count: 36500, period: day}
       - name: yellow_tripdata
         description: "Yellow taxi trip records for 2019-2020"
         freshness:
-          warn_after: {count: 1, period: day}
-          error_after: {count: 2, period: day}
+          warn_after: {count: 3650, period: day}
+          error_after: {count: 36500, period: day}
